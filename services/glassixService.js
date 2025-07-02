@@ -1,5 +1,6 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
+import { Query } from 'pg';
 dotenv.config();
 //console.log('ENV keys:', Object.keys(process.env));
 
@@ -76,3 +77,29 @@ export const sendMessage = async (ticketId, text) => {
 
 // const data = await sendMessage(158918467,"hey");
 // console.log("start:\n\n\n",data);
+
+
+
+export const closeTicket = async (ticketId) => {
+  const client = await api();
+
+  // Build URL: nextState must be in the query-string, not in the JSON body.
+  // Optional flags (getTicket, sendTicketStateChangedMessage, enableWebhook)
+  // are left at their defaults but shown here for clarity.
+  const url =
+    `/tickets/setstate/${ticketId}` +
+    '?nextState=Closed' +
+    '&getTicket=false' +
+    '&sendTicketStateChangedMessage=true' +
+    '&enableWebhook=true';
+
+  // No request body needed—Glassix uses only the query parameters.
+  const { data } = await client.put(url);
+  return data;
+};
+
+
+
+// const data = await closeTicket(158922246);
+// console.log("start:\n\n\n",data);
+
