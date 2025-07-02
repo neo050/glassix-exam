@@ -32,6 +32,47 @@ export const getAccessToken = async () => {
   return cachedToken;
 };
 
-
 // const token = await getAccessToken();
 // console.log(token);
+
+
+// helper axios instance
+// Returns an Axios instance pre-configured with BASE_URL and a fresh Bearer token in the Authorization header
+const api = async () => {
+  const token = await getAccessToken();
+  return axios.create({
+    baseURL: BASE_URL,
+    headers: { Authorization: `Bearer ${token}` }
+  });
+};
+
+
+export const createTicket = async () => {
+  const client = await api();
+  const url = '/tickets/create';          // :contentReference[oaicite:1]{index=1}
+  const payload = {
+    participants: [{
+      type: 'Client',
+      protocolType: 'Mail',
+      subProtocolType: 'MailTo',
+      identifier: 'gurl@consist.co.il',
+      name: 'Exam'
+    }]
+  };
+  const { data } = await client.post(url, payload);
+  return data;          // data.id -ticket ID
+};
+
+// const data = await createTicket();
+// console.log(data);
+
+
+
+export const sendMessage = async (ticketId, text) => {
+  const client = await api();
+  const url = `/tickets/send/${ticketId}`; // :contentReference[oaicite:2]{index=2}
+  return client.post(url, { text });
+};
+
+// const data = await sendMessage(158918467,"hey");
+// console.log("start:\n\n\n",data);
