@@ -12,7 +12,7 @@ const {
 } = process.env;
 
 const BASE_URL = `https://${WORKSPACE}.glassix.com/api/v1.2`;
-console.log(BASE_URL);
+//console.log(BASE_URL);
 let cachedToken = null;          //We will remember a token for 3 hours.
 let tokenExpires = 0;
 
@@ -28,7 +28,7 @@ export const getAccessToken = async () => {
 
   const { data } = await axios.post(url, payload);
   cachedToken  = data.access_token;
-  console.log(data);
+  //console.log(data);
   tokenExpires = Date.now() + 1000 * 60 * 60 * 3;   // 3h
   return cachedToken;
 };
