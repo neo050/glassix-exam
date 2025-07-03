@@ -72,7 +72,8 @@ export const createTicket = async () => {
 export const sendMessage = async (ticketId, text) => {
   const client = await api();
   const url = `/tickets/send/${ticketId}`; // :contentReference[oaicite:2]{index=2}
-  return client.post(url, { text });
+ const { data } = await client.post(url, { text });
+ return data;  
 };
 
 // const data = await sendMessage(158918467,"hey");
